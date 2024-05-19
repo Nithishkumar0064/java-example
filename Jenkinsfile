@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Deploy ') {
             steps {
-                sh 'docker run -itd --name ${containerName} -p 8090:8080 ${registry}
+                sh 'docker run -itd --name ${containerName} -p 8090:8080 ${registry}'
             }
             
         }
