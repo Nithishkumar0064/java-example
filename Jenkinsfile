@@ -1,28 +1,40 @@
+#!groovy
 pipeline {
-	agent any 	
-	stages {
-		stage('Checkout') {
-			steps {
-				echo 'Checkout completed'
-			}
-		}
-		stage('Static-test') {
-			steps {
-				echo 'Running static tests on code'
-			}
-		}
-		stage('Build') {
-      when {
-        branch "master"
+    environment {
+  registry = 'nithishnithi/tomcat'
+  registryCredentials = 'Docker_credential'
+ }
+    agent {label'docker'}
+    stages{
+        stage('git-checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Nithishkumar0064/java-example.git'
+            }
+        }
+        stage('Build docker image'){
+            steps {
+                script {
+                    image = docker.build("${registry}:$BUILD_NUMBER")
+                }
+            }
+        }
+        stage('Push image to Hub'){
+            steps {
+                sh 'echo Registry-push'
+                script {
+                    docker.withRegistry('', registryCredentials) {
+                        image.push()
+                        image.push('latest')
+                    }
+                }
+            }
+        }
+        stage('Deploy ') {
+            steps {
+                sh 'docker run -itd --name cont-${BUILD_ID} -p 8080:8080 ${registry} :${BUILD_ID}
+            }
+            
+        }
+        
       }
-			steps {
-				sh 'echo "Building the code"'
-			}
-		}
-		stage('Deploy') {
-			steps {
-				echo 'Deploying into environment'
-			}
-		}
-	}
-}
+    }
