@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Deploy ') {
             steps {
-                sh 'docker run -itd --name cont-${BUILD_ID} -p 8080:8080 ${registry} :${BUILD_ID}
+                sh 'docker run -itd  -p 8090:8080 ${registry} :${BUILD_ID}
             }
             
         }
