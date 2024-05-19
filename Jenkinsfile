@@ -2,6 +2,7 @@
 pipeline {
     environment {
   registry = 'nithishnithi/tomcat'
+  containerName = 'my-container'     
   registryCredentials = 'Docker_credential'
  }
     agent {label'docker'}
@@ -31,7 +32,7 @@ pipeline {
         }
         stage('Deploy ') {
             steps {
-                sh 'docker run -itd  -p 8090:8080 ${registry} :${BUILD_ID}
+                sh 'docker run -itd --name ${containerName} -p 8090:8080 ${registry}
             }
             
         }
