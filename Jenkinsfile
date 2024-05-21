@@ -1,8 +1,8 @@
 #!groovy
 pipeline {
     environment {
-  registry = 'nithishnithi/tomcat'
-  containerName = 'my-container'     
+  registry = 'nithishnithi/tomcat1'
+  containerName = 'my-container1'     
   registryCredentials = 'Docker_credential'
  }
     agent {label'docker'}
@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Deploy ') {
             steps {
-                sh 'docker run -itd --name ${containerName} -p 8090:8080 ${registry}'
+                sh 'docker run -itd --name ${containerName} -p 8000:8080 ${registry}'
             }
             
         }
